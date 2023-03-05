@@ -119,27 +119,21 @@ class InputOutputTest {
 	private void printLevelPathFiles(int maxLevel, Path path) throws IOException {
 		Files.walk(path, maxLevel, FileVisitOption.FOLLOW_LINKS)
 		.filter(n -> n != path)
-		.forEach(n -> {
-			if (Files.isDirectory(n)) {
-				System.out.println(" ".repeat(n.getNameCount()) +  n.getFileName() + "| dir");
-			} else {
-				System.out.println(" ".repeat(n.getNameCount()) +  n.getFileName() + "|file");
-			}
-			
-		});
+		.forEach(n -> fileOrDirPrint(n));
 	}
 
 	private void printAllPathFiles(Path path) throws IOException {
 		Files.walk(path, FileVisitOption.FOLLOW_LINKS)
 		.filter(n -> n != path)
-		.forEach(n -> {
-			if (Files.isDirectory(n)) {
-				System.out.println(" ".repeat(n.getNameCount()) +  n.getFileName() + "| dir");
-			} else {
-				System.out.println(" ".repeat(n.getNameCount()) +  n.getFileName() + "|file");
-			}
-			
-		});
+		.forEach(n -> fileOrDirPrint(n));
+	}
+	
+	private void fileOrDirPrint(Path path) {
+		if (Files.isDirectory(path)) {
+			System.out.println(" ".repeat(path.getNameCount()) +  path.getFileName() + "| dir");
+		} else {
+			System.out.println(" ".repeat(path.getNameCount()) +  path.getFileName() + "|file");
+		}
 	}
 	
 }
