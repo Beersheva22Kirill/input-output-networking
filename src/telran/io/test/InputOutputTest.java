@@ -54,18 +54,21 @@ class InputOutputTest {
 	void printDirectoryFile(String pathParam, int maxLevel) {
 		Path path = Path.of(pathParam);
 		System.out.println("-------- used class 'File' ---------");
-		
-		if (pathParam.equals(".")) {
-			System.out.println(OFFSET_DIR_NAME + path.toAbsolutePath().getParent().getFileName() + "|dir");
-		} else {
-			System.out.println(OFFSET_DIR_NAME + path.getFileName() + "|dir");
-		}
+			printMainDirectory(pathParam, path);
 		
 		if (maxLevel < 1) {
 			allPathPrinting(pathParam, OFFSET);
 		} else {
 			levelPathPrinting(pathParam, maxLevel, OFFSET);
 		}		
+	}
+
+	private void printMainDirectory(String pathParam, Path path) {
+		if (pathParam.equals(".")) {
+			System.out.println(OFFSET_DIR_NAME + path.toAbsolutePath().getParent().getFileName() + "|dir");
+		} else {
+			System.out.println(OFFSET_DIR_NAME + path.getFileName() + "|dir");
+		}
 	}
 
 	private void levelPathPrinting(String pathParam, int maxLevel, String offset) {
@@ -103,11 +106,7 @@ class InputOutputTest {
 	void printDirectoryFiles(String pathParam, int maxLevel) throws IOException {
 		Path path = Path.of(pathParam);
 		System.out.println("-------- used class 'Files' ---------");
-		if (pathParam.equals(".")) {
-			System.out.println(OFFSET_DIR_NAME + path.toAbsolutePath().getParent().getFileName() + "|dir");
-		} else {
-			System.out.println(OFFSET_DIR_NAME + path.getFileName() + "|dir");
-		}
+			printMainDirectory(pathParam, path);
 		
 		if (maxLevel < 1) {
 			printAllPathFiles(path);
