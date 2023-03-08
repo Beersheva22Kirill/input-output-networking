@@ -115,7 +115,7 @@ class InputOutputTest {
 		}
 	
 	}
-
+ 
 	private void printLevelPathFiles(int maxLevel, Path path) throws IOException {
 		Files.walk(path, maxLevel, FileVisitOption.FOLLOW_LINKS)
 		.filter(n -> n != path)
