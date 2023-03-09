@@ -9,9 +9,6 @@ import java.time.LocalDateTime;
 
 public class FilesCopy extends Copy {
 	
-
-	private long timeCopyring;
-
 	FilesCopy(String srcFilePath, String destFilePath, boolean owerwrite) {
 		super(srcFilePath, destFilePath, owerwrite);
 		

@@ -10,9 +10,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 
 public class TransferCopy extends Copy {
-	private long timeCopyring;
-	private long fileSize;
-	
+
 	TransferCopy(String srcFilePath, String destFilePath, boolean owerwrite) {
 		super(srcFilePath, destFilePath, owerwrite);
 	}

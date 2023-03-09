@@ -5,6 +5,7 @@ public abstract class Copy {
 	String srcFilePath;
 	String destFilePath;
 	boolean owerwrite;
+	long timeCopyring;
 	
 	
 	abstract long copy() throws Exception;

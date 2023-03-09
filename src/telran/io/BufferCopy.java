@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class BufferCopy extends Copy {
 	
 	private long bufferSize;
-	private long timeCopyring;
 
 	BufferCopy(String srcFilePath, String destFilePath, boolean owerwrite ,long bufferSize) {
 		super(srcFilePath, destFilePath, owerwrite);
