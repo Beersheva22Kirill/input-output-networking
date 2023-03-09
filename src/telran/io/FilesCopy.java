@@ -11,7 +11,6 @@ public class FilesCopy extends Copy {
 	
 
 	private long timeCopyring;
-	private long fileSize;
 
 	FilesCopy(String srcFilePath, String destFilePath, boolean owerwrite) {
 		super(srcFilePath, destFilePath, owerwrite);
@@ -26,16 +25,15 @@ public class FilesCopy extends Copy {
 						Files.copy(Path.of(srcFilePath), outputStream);
 						LocalDateTime timeEnd = LocalDateTime.now();
 						timeCopyring = timeEnd.getNano() - timeBegin.getNano();
-						fileSize = Files.size(Path.of(destFilePath));
 			}
 		}
-		return fileSize;
+		return Files.size(Path.of(destFilePath));
 	}
 
 	@Override
-	DisplayResult getDisplayResult() {
+	DisplayResult getDisplayResult(long sizeFile) {
 		
-		return new DisplayResult(fileSize, timeCopyring);
+		return new DisplayResult(sizeFile, timeCopyring);
 	}
 
 }

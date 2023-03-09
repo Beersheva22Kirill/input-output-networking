@@ -26,16 +26,15 @@ public class TransferCopy extends Copy {
 						inputStream.transferTo(outputStream);
 						LocalDateTime timeEnd = LocalDateTime.now();
 						timeCopyring = timeEnd.getNano() - timeBegin.getNano();
-						fileSize = Files.size(Path.of(destFilePath));
 			}
 		}
-		return fileSize;	
+		return Files.size(Path.of(destFilePath));	
 	}
 
 	@Override
-	public DisplayResult getDisplayResult() {
+	public DisplayResult getDisplayResult(long sizeFile) {
 		
-		return new DisplayResult(fileSize, timeCopyring);
+		return new DisplayResult(sizeFile, timeCopyring);
 	}
 	
 }

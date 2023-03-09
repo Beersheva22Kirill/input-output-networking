@@ -8,11 +8,11 @@ public abstract class Copy {
 	
 	
 	abstract long copy() throws Exception;
-	abstract DisplayResult getDisplayResult();
+	abstract DisplayResult getDisplayResult(long sizeFile);
 	
 	public void copyRun() throws Exception{
-		this.copy();
-		DisplayResult result = this.getDisplayResult();
+		long sizeFile = this.copy();
+		DisplayResult result = this.getDisplayResult(sizeFile);
 		System.out.println(result.toString());
 	}
 	
