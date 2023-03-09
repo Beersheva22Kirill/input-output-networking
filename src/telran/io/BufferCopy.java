@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
 
 public class BufferCopy extends Copy {
 	
@@ -22,22 +20,17 @@ public class BufferCopy extends Copy {
 
 	@Override
 	long copy() throws IOException {
-		
-		
-		if (Files.notExists(Path.of(destFilePath),LinkOption.NOFOLLOW_LINKS) || owerwrite) {
+			
 			try(InputStream inputStream = new FileInputStream(srcFilePath);
 					OutputStream outputStream = new FileOutputStream(destFilePath);){		
 					byte[] buffer = new byte[(int) bufferSize];
 					int length = inputStream.read(buffer);
 						while (length > 0) {
 							outputStream.write(buffer, 0, length);
-							length = inputStream.read(buffer);
-						
+							length = inputStream.read(buffer);			
 						}
 			}
-						
-			}
-		
+	
 		return Files.size(Path.of(destFilePath));
 	}
 

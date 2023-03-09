@@ -3,9 +3,7 @@ package telran.io;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
 
 public class FilesCopy extends Copy {
 	
@@ -16,11 +14,11 @@ public class FilesCopy extends Copy {
 	
 	@Override
 	long copy() throws Exception {
-		if (Files.notExists(Path.of(destFilePath),LinkOption.NOFOLLOW_LINKS) || owerwrite) {
+		
 			try(OutputStream outputStream = new FileOutputStream(destFilePath);){
 						Files.copy(Path.of(srcFilePath), outputStream);
 			}
-		}
+		
 		return Files.size(Path.of(destFilePath));
 	}
 
