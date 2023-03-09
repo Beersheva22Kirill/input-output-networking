@@ -12,7 +12,13 @@ public abstract class Copy {
 	abstract DisplayResult getDisplayResult(long sizeFile);
 	
 	public void copyRun() throws Exception{
+		long timeBegin = System.currentTimeMillis();
+		
 		long sizeFile = this.copy();
+		
+		long timeEnd = System.currentTimeMillis();
+		timeCopyring = timeEnd - timeBegin;
+		
 		DisplayResult result = this.getDisplayResult(sizeFile);
 		System.out.println(result.toString());
 	}

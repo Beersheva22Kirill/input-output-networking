@@ -17,13 +17,10 @@ public class TransferCopy extends Copy {
 	
 	@Override
 	long copy() throws Exception {
-		long timeBegin = System.currentTimeMillis();
 		if (Files.notExists(Path.of(destFilePath),LinkOption.NOFOLLOW_LINKS) || owerwrite) {
 			try(InputStream inputStream = new FileInputStream(srcFilePath);
 					OutputStream outputStream = new FileOutputStream(destFilePath);){
-						inputStream.transferTo(outputStream);
-						long timeEnd = System.currentTimeMillis();
-						timeCopyring = timeEnd - timeBegin;
+						inputStream.transferTo(outputStream);			
 			}
 		}
 		return Files.size(Path.of(destFilePath));	

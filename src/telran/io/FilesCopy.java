@@ -16,12 +16,9 @@ public class FilesCopy extends Copy {
 	
 	@Override
 	long copy() throws Exception {
-		long timeBegin = System.currentTimeMillis();
 		if (Files.notExists(Path.of(destFilePath),LinkOption.NOFOLLOW_LINKS) || owerwrite) {
 			try(OutputStream outputStream = new FileOutputStream(destFilePath);){
 						Files.copy(Path.of(srcFilePath), outputStream);
-						long timeEnd = System.currentTimeMillis();
-						timeCopyring = timeEnd - timeBegin;
 			}
 		}
 		return Files.size(Path.of(destFilePath));

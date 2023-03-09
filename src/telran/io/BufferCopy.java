@@ -23,7 +23,7 @@ public class BufferCopy extends Copy {
 	@Override
 	long copy() throws IOException {
 		
-		long timeBegin = System.currentTimeMillis();
+		
 		if (Files.notExists(Path.of(destFilePath),LinkOption.NOFOLLOW_LINKS) || owerwrite) {
 			try(InputStream inputStream = new FileInputStream(srcFilePath);
 					OutputStream outputStream = new FileOutputStream(destFilePath);){		
@@ -34,8 +34,6 @@ public class BufferCopy extends Copy {
 							length = inputStream.read(buffer);
 						
 						}
-					long timeEnd = System.currentTimeMillis();
-					timeCopyring = timeEnd - timeBegin;
 			}
 						
 			}
