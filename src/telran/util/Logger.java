@@ -20,42 +20,46 @@ public class Logger {
 		this.level = level;
 	}
 	
-	private LoggerRecord getLoggerReccord(String message) {
+	
+	public void error(String message) {
+		if (checkLevel(level,Level.ERROR)) {
+			handler.publish(getLoggerReccord(message,Level.ERROR));
+		}
+	}
+
+	public void warn(String message) {
+		if (checkLevel(level,Level.WARNING)) {
+			handler.publish(getLoggerReccord(message,Level.WARNING));
+		}
+	}
+	
+	public void info(String message) {
+		if (checkLevel(level,Level.INFO)) {
+			handler.publish(getLoggerReccord(message,Level.INFO));
+		}
+	}
+	
+	public void debug(String message) {
+		if (checkLevel(level,Level.DEBUG)) {
+			handler.publish(getLoggerReccord(message,Level.DEBUG));
+		}
+	}
+	
+	public void trace(String message) {
+		if (checkLevel(level,Level.TRACE)) {
+			handler.publish(getLoggerReccord(message, Level.TRACE));
+		}
+	}
+	
+	private LoggerRecord getLoggerReccord(String message, Level level) {
 		ZonedDateTime time = ZonedDateTime.now();
 		ZoneId zoneId = time.getZone();
 		LoggerRecord record = new LoggerRecord(Instant.now(), zoneId.toString(), level, name, message);
 		return record;
 	}
 	
-	public void error(String message) {
-		if (level.equals(Level.ERROR)) {
-			handler.publish(getLoggerReccord(message));
-		}
-	}
-
-	
-	public void warn(String message) {
-		if (level.equals(Level.WARNING)) {
-			handler.publish(getLoggerReccord(message));
-		}	
-	}
-	
-	public void info(String message) {
-		if (level.equals(Level.INFO)) {
-			handler.publish(getLoggerReccord(message));
-		}
-	}
-	
-	public void debug(String message) {
-		if (level.equals(Level.DEBUG)) {
-			handler.publish(getLoggerReccord(message));
-		}
-	}
-	
-	public void trace(String message) {
-		if (level.equals(Level.TRACE)) {
-			handler.publish(getLoggerReccord(message));
-		}
+	private boolean checkLevel(Level level, Level levelTest) {
+		return level.compareTo(levelTest) < 1;
 	}
 
 }

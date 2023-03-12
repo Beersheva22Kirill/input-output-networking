@@ -24,7 +24,7 @@ class LoggerTest {
 			LOG.setLevel(Level.ERROR);
 			LOG.error("ErrorTestValid");
 			LOG.warn("WarningTestNotValid");
-			LOG.trace("WarningTestNotValid");
+			LOG.trace("TraceTestNotValid");
 			LOG.error("ErrorTestValid");
 		}
 		
@@ -39,15 +39,43 @@ class LoggerTest {
 		}
 		assertEquals(2, countString);
 	}
+	
+	@Test
+	void loggerWarningTest() throws IOException {
+		String nameErr = fileNameLog + "_" + LocalDate.now().toString() +"_wrn.txt";
+		try(PrintStream printLog = new PrintStream(nameErr);){
+			SimpleStreamHandler handler = new SimpleStreamHandler(printLog);
+			Logger LOG = new Logger(handler, "logger");
+			LOG.setLevel(Level.WARNING);
+			LOG.error("ErrorTestValid");
+			LOG.warn("WarningTestValid");
+			LOG.trace("TraceTestNotValid");
+			LOG.error("ErrorTestValid");
+		}
+		
+		BufferedReader reader = new BufferedReader(new FileReader(nameErr));
+		int countString = 0;
+		while (true) {
+			String nextline = reader.readLine(); 
+			if (nextline == null) {
+				break;
+			}	
+			countString++;
+		}
+		assertEquals(3, countString);
+	}
 		
 		@Test
-		void loggerWarnTest() throws FileNotFoundException {
+		void loggerDebugTest() throws FileNotFoundException {
 			String nameDbg = fileNameLog + "_" + LocalDate.now().toString() +"_dbg.txt";
 			try(PrintStream printLog = new PrintStream(nameDbg);){
 				SimpleStreamHandler handler = new SimpleStreamHandler(printLog);
 				Logger LOG = new Logger(handler, "logger");
 				LOG.setLevel(Level.DEBUG);
 				LOG.debug("debugTestValid");
+				LOG.error("ErrorTestValid");
+				LOG.warn("WarningTestValid");
+				LOG.trace("TraceTestNotValid");
 			}
 	}
 
