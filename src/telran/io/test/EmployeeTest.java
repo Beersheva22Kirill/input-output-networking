@@ -56,6 +56,8 @@ class EmployeeTest {
 		for (Employee employee : expected) {
 			assertTrue(company.contains(employee.getId()));
 		}
+		assertEquals(empl3, company.removeEmployee(125));
+		assertNull(company.getEmployesByDepartment(empl3.getDepartment()));
 	}
 	
 	@Test

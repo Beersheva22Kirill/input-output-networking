@@ -68,21 +68,41 @@ public class CompanyImpl implements Company {
 					
 		return temp == null;
 	}
-
+	
 	@Override
 	public Employee removeEmployee(long id) {
 		Employee removed = getEmployee(id);
 		if (removed != null) {
-			List<Employee> temp = getEmployesByDepartment(removed.department);
-			temp.remove(removed);
-			temp = getEmployeesBySalary(removed.salary, removed.salary);
-			temp.remove(removed);
-			temp = getEmployeesByMonth(removed.birthDate.getMonthValue());
-			temp.remove(removed);
+			removedToAdditionalMaps(removed);
 			emplId.remove(removed.id);
 		}
 		
 		return removed;
+	}
+
+	private void removedToAdditionalMaps(Employee removed) {
+		List<Employee> temp = getEmployesByDepartment(removed.department);
+
+		if (temp.size() > 1) {
+			temp.remove(removed);
+			} else {
+				employeesDep.remove(removed.department);
+			}		
+		
+		temp = getEmployeesBySalary(removed.salary, removed.salary);
+		
+		if(temp.size() > 1) {
+			temp.remove(removed);
+			} else {
+				emplSalary.remove(removed.salary);
+			}
+			
+		temp = getEmployeesByMonth(removed.birthDate.getMonthValue());
+		if (temp.size() > 1) {
+			temp.remove(removed);
+			} else {
+				emplMonth.remove(removed.birthDate.getMonthValue());
+			}
 	}
 
 	@Override
