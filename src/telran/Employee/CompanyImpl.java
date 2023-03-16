@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.Spliterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -23,7 +24,7 @@ public class CompanyImpl implements Company {
 	private static final long serialVersionUID = 1L;
 	
 	Map<String, List<Employee>> employeesDep = new HashMap<>();
-	Map<Integer, List<Employee>> emplSalary = new TreeMap<>();
+	TreeMap<Integer, List<Employee>> emplSalary = new TreeMap<>();
 	Map<Long, Employee> emplId = new HashMap<>();
 	Map<Integer, List<Employee>> emplMonth = new HashMap<>();
 
@@ -127,17 +128,15 @@ public class CompanyImpl implements Company {
 	public List<Employee> getEmployeesBySalary(int SalaryFrom, int SalaryTo) {
 		
 		List<Employee> result = new ArrayList<>();
-		Set<Integer> set = emplSalary.keySet();
+		SortedMap<Integer,List<Employee>> map = emplSalary.subMap(SalaryFrom, SalaryTo);
+		Set<Integer> set = map.keySet();
 		Iterator<Integer> iterator = set.iterator();
 			while (iterator.hasNext()) {
 				int salary = iterator.next();
-				if (salary > SalaryTo) 	return result;
-				if ( salary >= SalaryFrom && salary <= SalaryTo) {
 					Iterator<Employee> emplItr = emplSalary.get(salary).iterator();
 					while(emplItr.hasNext()) {
 						result.add(emplItr.next());
-					}
-				}		
+					}		
 			}
 		return result;
 	}

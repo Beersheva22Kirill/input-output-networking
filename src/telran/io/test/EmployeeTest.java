@@ -20,7 +20,7 @@ class EmployeeTest {
 	String fileName = "company.data";
 	String fileName1 = "company_new.data";
 	Company company;
-	Employee empl1 = new Employee(123, "Ivan", LocalDate.parse("1989-04-04"), "Department1", 25000);
+	Employee empl1 = new Employee(123, "Ivan", LocalDate.parse("1989-04-04"), "Department1", 24999);
 	Employee empl2 = new Employee(124, "Sergey", LocalDate.parse("1984-02-21"), "Department2", 35000);
 	Employee empl3 = new Employee(125, "Ilan", LocalDate.parse("1991-06-02"), "Department1", 35000);
 	Employee empl4 = new Employee(126, "Adam", LocalDate.parse("1985-12-01"), "Department2", 25450);
