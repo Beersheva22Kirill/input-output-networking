@@ -156,7 +156,7 @@ public class CompanyImpl implements Company {
 	@Override
 	public void save(String pathName) {
 		try(ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(pathName))){
-			os.writeObject(this);
+			os.writeObject(this.getAllEmployees());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -166,10 +166,10 @@ public class CompanyImpl implements Company {
 	@Override
 	public void restore(String pathName) {	
 		
-	Company companyRestoreTemp = new CompanyImpl();
+	List<Employee> employeesTemp = new ArrayList<>();
 	
 	try(ObjectInputStream is = new ObjectInputStream(new FileInputStream(pathName))) {
-			companyRestoreTemp = (CompanyImpl)is.readObject(); 
+		employeesTemp = (List<Employee>) is.readObject(); 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			} catch (IOException e) {
@@ -178,7 +178,7 @@ public class CompanyImpl implements Company {
 					e.printStackTrace();
 				}
 	
-		Iterator<Employee>iterator = companyRestoreTemp.iterator();
+		Iterator<Employee>iterator = employeesTemp.iterator();
 			while (iterator.hasNext()) {
 				this.addEmployee((Employee)iterator.next());
 		
