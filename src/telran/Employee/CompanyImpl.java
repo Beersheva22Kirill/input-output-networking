@@ -12,12 +12,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.Spliterator;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class CompanyImpl implements Company {
 
@@ -188,7 +185,6 @@ public class CompanyImpl implements Company {
 	public boolean contains(long id) {
 		
 		return emplId.containsKey(id);
-		
 	}
 
 

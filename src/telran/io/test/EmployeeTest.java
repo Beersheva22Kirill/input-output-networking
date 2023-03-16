@@ -5,13 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import junit.framework.Assert;
 import telran.Employee.Company;
 import telran.Employee.CompanyImpl;
 import telran.Employee.Employee;
