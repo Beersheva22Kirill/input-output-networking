@@ -19,6 +19,11 @@ public class LoggerRecord {
 		this.message = message;
 	}
 	
+	public String toString() {
+		return " Time: " + timestamp + " Zone: " + zoneId + " Level: " + level.getName() + " nameLogger: " + loggerName + " message: " + message;
+		
+	}
+	
 	
 	
 
