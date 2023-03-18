@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,114 +20,76 @@ import java.util.TreeMap;
 
 public class CompanyImpl implements Company {
 
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 	
-	Map<String, List<Employee>> employeesDep = new HashMap<>();
-	TreeMap<Integer, List<Employee>> emplSalary = new TreeMap<>();
+	Map<String, Set<Employee>> employeesDep = new HashMap<>();
+	TreeMap<Integer, Set<Employee>> emplSalary = new TreeMap<>();
 	Map<Long, Employee> emplId = new HashMap<>();
-	Map<Integer, List<Employee>> emplMonth = new HashMap<>();
+	Map<Integer, Set<Employee>> emplMonth = new HashMap<>();
 
 	@Override
-	public Iterator<Employee> iterator() {
-		List<Employee> list = getAllEmployees();
+	public Iterator<Employee> iterator() { 
 		
-		return list.iterator();
+		return getAllEmployees().iterator();
 	}
 
 	@Override
 	public boolean addEmployee(Employee employee) {
 		
 		Employee temp = emplId.put(employee.id, employee);
-		
-		List<Employee> listDep = getEmployesByDepartment(employee.department);
-		if (listDep != null) {
-			listDep.add(employee);
-		} else {
-			listDep = new LinkedList<>();
-			listDep.add(employee);
-			employeesDep.put(employee.department, listDep);
-		}
-						
-		List<Employee> listSalary = getEmployeesBySalary(employee.salary, employee.salary);
-		if (!listSalary.isEmpty()) {
-			listSalary.add(employee);
-		}	else {
-			listSalary = new LinkedList<>();
-			listSalary.add(employee);
-			emplSalary.put(employee.salary, listSalary);
-		}
-		
-		List<Employee> listMounth = getEmployeesByMonth(employee.birthDate.getMonthValue());
-		if (listMounth != null) {
-			listMounth.add(employee);
-		}	else {
-			listMounth = new LinkedList<>();
-			listMounth.add(employee);
-			emplMonth.put(employee.birthDate.getMonthValue(), listMounth);
-		}
+		addOtherMap(employeesDep, employee.department, employee);
+		addOtherMap(emplMonth, employee.birthDate.getMonthValue(), employee);
+		addOtherMap(emplSalary, employee.salary, employee);
 					
 		return temp == null;
+	}
+	
+	private <T> void addOtherMap(Map<T, Set<Employee>> map, T key, Employee empl) {
+		map.computeIfAbsent(key, k->new HashSet<>()).add(empl);
+		
 	}
 	
 	@Override
 	public Employee removeEmployee(long id) {
 		Employee removed = getEmployee(id);
 		if (removed != null) {
-			removedToAdditionalMaps(removed);
+			removedToOtherMaps(emplMonth, removed.birthDate.getMonthValue(), removed);
+			removedToOtherMaps(employeesDep, removed.department, removed);
+			removedToOtherMaps(emplSalary, removed.salary, removed);
 			emplId.remove(removed.id);
 		}
 		
 		return removed;
 	}
 
-	private void removedToAdditionalMaps(Employee removed) {
-		List<Employee> temp = getEmployesByDepartment(removed.department);
-
-		if (temp.size() > 1) {
-			temp.remove(removed);
-			} else {
-				employeesDep.remove(removed.department);
-			}		
+	private <T> void removedToOtherMaps(Map<T, Set<Employee>> empl, T key, Employee employee) {
+		Set<Employee> set = empl.get(key);
+		set.remove(employee);
+		if (set.isEmpty()) {
+			empl.remove(key);
+		}
 		
-		temp = getEmployeesBySalary(removed.salary, removed.salary);
-		
-		if(temp.size() > 1) {
-			temp.remove(removed);
-			} else {
-				emplSalary.remove(removed.salary);
-			}
-			
-		temp = getEmployeesByMonth(removed.birthDate.getMonthValue());
-		if (temp.size() > 1) {
-			temp.remove(removed);
-			} else {
-				emplMonth.remove(removed.birthDate.getMonthValue());
-			}
 	}
+
 
 	@Override
 	public List<Employee> getAllEmployees() {
-		List<Employee> result = new ArrayList<>();
-		Set<Long> set = emplId.keySet();
-		Iterator<Long> iterator = set.iterator();
+		List<Employee> result = new LinkedList(emplId.values());
 		
-		while (iterator.hasNext()) {
-			result.add(getEmployee(iterator.next()));	
-		}
 		return result;
 	}
 
 	@Override
 	public List<Employee> getEmployeesByMonth(int month) {
-		
-		return emplMonth.get(month);
+		List<Employee> list = new LinkedList<>(emplMonth.getOrDefault(month, Collections.emptySet()));
+		return list;
 	}
 
 	@Override
 	public List<Employee> getEmployeesBySalary(int SalaryFrom, int SalaryTo) {
 		
 		List<Employee> result = new ArrayList<>();
-		SortedMap<Integer,List<Employee>> map = emplSalary.subMap(SalaryFrom, SalaryTo);
+		SortedMap<Integer,Set<Employee>> map = emplSalary.subMap(SalaryFrom, SalaryTo);
 		Set<Integer> set = map.keySet();
 		Iterator<Integer> iterator = set.iterator();
 			while (iterator.hasNext()) {
@@ -140,8 +104,8 @@ public class CompanyImpl implements Company {
 
 	@Override
 	public List<Employee> getEmployesByDepartment(String department) {
-		
-		return employeesDep.get(department);
+		List<Employee> list = new LinkedList<>(employeesDep.getOrDefault(department, Collections.emptySet()));
+		return list;
 	}
 
 	@Override
@@ -186,6 +150,5 @@ public class CompanyImpl implements Company {
 		
 		return emplId.containsKey(id);
 	}
-
 
 }
