@@ -1,7 +1,5 @@
 package telran.io.test;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,9 +31,7 @@ class ServerTCPTests {
 			writer = new PrintStream(socket.getOutputStream());
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			client = new TcpClientHandler(socket, writer, reader);
-			LOG = new Logger(client, "loggetTest");
-		
-		
+			LOG = new Logger(client, "loggetTest");	
 	}
 
 	@Test
@@ -48,8 +44,13 @@ class ServerTCPTests {
 		LOG.trace("Test send trace 2");
 		writer.println("count#trace");
 		System.out.println(reader.readLine() + " records");
+	}
+	
+	@Test
+	void recordErrorTest() throws IOException {
 		LOG.setLevel(Level.ERROR);
-		LOG.error("Not_trace");
+		LOG.trace("Not_valid");
+		LOG.error("Valid_record");
 		writer.println("count#error");
 		System.out.println(reader.readLine() + " records");
 	}

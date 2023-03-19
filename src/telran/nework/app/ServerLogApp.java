@@ -11,7 +11,7 @@ public class ServerLogApp {
 
 	private static final int PORT = 4000;
 	private static Map<String, Integer> counter = new HashMap<>();
-	private static List<String> messenges = new ArrayList<>();
+	private static List<String> logMessanges = new ArrayList<>();
 
 
 	public static void main(String[] args) throws Exception {
@@ -51,13 +51,9 @@ public class ServerLogApp {
 	private static String getResponse(String request) {
 		String res = "Wrong request";
 		String tokens[] = request.split("#");
-		if (tokens.length == 3) {
+		if (tokens.length > 1) {
 			res = switch (tokens[0]) {
-			case "log" -> writeLogRecord(tokens[1],tokens[2]);
-			default -> "Wrong type: " + tokens[0];
-			};
-		} else if (tokens.length == 2) {
-			res = switch (tokens[0]) {
+			case "log" -> tokens.length ==3 ? writeLogRecord(tokens[1],tokens[2]) : "Wrong number of arguments";
 			case "count" -> getLogCount(tokens[1]);
 			default -> "Wrong type: " + tokens[0];
 			};
@@ -68,7 +64,7 @@ public class ServerLogApp {
 	private static String getLogCount(String level) {
 		 String res;
 		 try {
-			res = counter.get(level.toUpperCase()).toString();
+			res = counter.get(level.toUpperCase()).toString() + " " + level;
 		} catch (Exception e) {
 			res = "Wrong level logging";
 		}
@@ -76,10 +72,10 @@ public class ServerLogApp {
 		return res;
 	}
 
-	private static String writeLogRecord(String string, String level) {
+	private static String writeLogRecord(String message, String level) {
 		String res;
 		try {
-			messenges.add(string);
+			logMessanges.add(message);
 			level = level.toUpperCase();
 			Integer count = counter.get(level);
 			count = count == null ? count = 1 : ++count;
@@ -87,7 +83,7 @@ public class ServerLogApp {
 			res = "OK";
 			
 		} catch (Exception e) {
-			res = "Not recording in base";
+			res = "Not recorded in base";
 		}
 		return res;
 	}
