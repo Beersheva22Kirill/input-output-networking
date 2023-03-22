@@ -25,6 +25,8 @@ public class TcpClientObjectApp {
 			
 			response = client.send("reverse", wrongData);
 			System.out.printf("response Server:%s DATA:%s\n",response.code,response.data);
+			
+			client.close();
 	
 		} catch (Exception e) {
 			System.out.println(e.toString());

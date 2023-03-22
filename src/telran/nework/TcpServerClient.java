@@ -17,8 +17,9 @@ public class TcpServerClient implements Runnable {
 			Request request = (Request) input.readObject();
 			Response response = protocol.getResponse(request);
 			output.writeObject(response);
-			} catch (EOFException e) {
+			} catch (EOFException e) {	
 				System.out.println("client close connection");
+				break;
 			} catch (Exception e){
 				throw new RuntimeException(e.toString());
 			}
