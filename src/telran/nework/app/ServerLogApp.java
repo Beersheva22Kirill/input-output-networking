@@ -9,7 +9,10 @@ import telran.util.LoggerRecord;
 
 public class ServerLogApp {
 
-	private static final int PORT = 4000;
+	public static final String RESPONSE_OK = "OK";
+	public static final String COUNTER_PROTOCOL = "counter";
+	public static final String LOG_PROTOCOL = "log";
+	public static final int PORT = 4000;
 	private static Map<String, Integer> counter = new HashMap<>();
 	private static List<String> logMessanges = new ArrayList<>();
 
@@ -53,8 +56,8 @@ public class ServerLogApp {
 		String tokens[] = request.split("#");
 		if (tokens.length > 1) {
 			res = switch (tokens[0]) {
-			case "log" -> tokens.length ==3 ? writeLogRecord(tokens[1],tokens[2]) : "Wrong number of arguments";
-			case "count" -> getLogCount(tokens[1]);
+			case LOG_PROTOCOL -> tokens.length ==3 ? writeLogRecord(tokens[1],tokens[2]) : "Wrong number of arguments";
+			case COUNTER_PROTOCOL -> getLogCount(tokens[1]);
 			default -> "Wrong type: " + tokens[0];
 			};
 		}
@@ -64,7 +67,8 @@ public class ServerLogApp {
 	private static String getLogCount(String level) {
 		 String res;
 		 try {
-			res = counter.get(level.toUpperCase()).toString() + " " + level;
+			Integer count = counter.get(level.toUpperCase());
+			res = count == null ? "Not records " + level : count.toString();
 		} catch (Exception e) {
 			res = "Wrong level logging";
 		}
@@ -80,7 +84,7 @@ public class ServerLogApp {
 			Integer count = counter.get(level);
 			count = count == null ? count = 1 : ++count;
 			counter.put(level, count);
-			res = "OK";
+			res = RESPONSE_OK;
 			
 		} catch (Exception e) {
 			res = "Not recorded in base";

@@ -15,7 +15,7 @@ public class ServerTCPExampleApp {
 			Socket socket = serverSocket.accept();
 			try {
 				runServerClient(socket);
-			} catch (IOException e) {
+			} catch (IOException e) { 
 				System.out.println("abnormal closing connection");
 			}
 		}

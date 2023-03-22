@@ -2,10 +2,13 @@ package telran.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import telran.nework.app.ServerLogApp;
 
 public class TcpClientHandler implements Handler {
+	private static final String OK = "OK";
 	
 	private Socket socket;
 	private PrintStream writer;
@@ -13,15 +16,16 @@ public class TcpClientHandler implements Handler {
 	
 	@Override
 	public void publish(LoggerRecord loggerRecord) {
-			String line = "log#" + loggerRecord.toString() + "#" + loggerRecord.level.toString();	
+			String line = ServerLogApp.LOG_PROTOCOL + "#" + loggerRecord.toString() + "#" + loggerRecord.level.toString();	
 				writer.println(line);
-				String response = null;
 				try {
-					response = reader.readLine();
+					String response = reader.readLine();
+					if (!response.equals(OK)) {
+						throw new RuntimeException("Response from Logger Server is " + response);
+					}
 				} catch (IOException e) {
-					System.out.println("Not response from Server");
+					new RuntimeException(e.getMessage());
 				}
-				System.out.println(response);
 	}
 
 	public TcpClientHandler(Socket socket, PrintStream writer, BufferedReader reader) {
@@ -30,9 +34,28 @@ public class TcpClientHandler implements Handler {
 		this.reader = reader;
 	}
 	
+	public TcpClientHandler(String hostName, int port) {
+		
+		try {
+			socket = new Socket(hostName, port);
+			writer = new PrintStream(socket.getOutputStream());
+			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (IOException e) {
+			throw new RuntimeException(e.toString());
+		}
+	}
+	
+	public BufferedReader getReader() {
+		return reader;
+	}
+
 	@Override
 	public void close() {
-		writer.println("exit");
+		try {
+			socket.close();
+		} catch (IOException e) {
+			throw new RuntimeException("not closed " + e.getMessage());
+		}
 	}
 
 }
