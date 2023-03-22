@@ -90,7 +90,7 @@ public class CompanyImpl implements Company {
 	public List<Employee> getEmployeesBySalary(int SalaryFrom, int SalaryTo) {
 		
 		List<Employee> result = new ArrayList<>();
-		SortedMap<Integer,Set<Employee>> map = emplSalary.subMap(SalaryFrom, SalaryTo);
+		SortedMap<Integer,Set<Employee>> map = emplSalary.subMap(SalaryFrom, true, SalaryTo, true);
 		Set<Integer> set = map.keySet();
 		Iterator<Integer> iterator = set.iterator();
 			while (iterator.hasNext()) {
