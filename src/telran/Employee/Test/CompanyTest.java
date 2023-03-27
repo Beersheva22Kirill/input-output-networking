@@ -2,9 +2,11 @@ package telran.Employee.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
@@ -37,7 +39,7 @@ Employee empl2 = new Employee(ID2, "name", LocalDate.of(2000, MONTH1, 1), DEPART
 Employee empl3 = new Employee(ID3, "name", LocalDate.of(2000, MONTH2, 1), DEPARTMENT1, SALARY3);
 Employee empl4 = new Employee(ID4, "name", LocalDate.of(2000, MONTH1, 1), DEPARTMENT2, SALARY4);
 Employee[] employees = {empl1, empl2, empl3, empl4};
-Company company;
+CompanyClientTcp company;
 	@BeforeEach
 	void setUp() throws Exception {
 		company = new CompanyClientTcp();
@@ -45,15 +47,20 @@ Company company;
 			company.addEmployee(empl);
 		}
 	}
+	
+	@AfterEach
+	void closeClientTCP () throws IOException {
+		company.close();
+	}
 
 	@Test
 	void addEmployeeTest() {
 		Employee newEmployee = new Employee(ID10, DEPARTMENT2, BIRTH2, DEPARTMENT1, SALARY1);
 		assertTrue(company.addEmployee(newEmployee));
 		assertFalse(company.addEmployee(newEmployee));
+		assertEquals(newEmployee, company.removeEmployee(ID10));
 	}
 	@Test
-	@Disabled
 	void removeEmployeeTest() {
 		assertEquals(empl1, company.removeEmployee(ID1));
 		assertNull(company.removeEmployee(ID1));
@@ -73,7 +80,6 @@ Company company;
 		assertTrue(company.getEmployeesByMonth(MONTH1).isEmpty());
 	}
 	@Test
-	@Disabled
 	void employeesByDepartmentTest() {
 		assertTrue(company.getEmployesByDepartment("gggggg").isEmpty());
 		Employee[] expected = {empl2, empl4};
@@ -86,7 +92,6 @@ Company company;
 		
 	}
 	@Test
-	@Disabled
 	void employeesBySalaryTest() {
 		assertTrue(company.getEmployeesBySalary(100000000,100000100).isEmpty());
 		Employee[] expected = {empl1, empl2, empl3};
@@ -107,7 +112,6 @@ Company company;
 	}
 	
 	@Test
-	@Disabled
 	@Order(1)
 	void saveTest() {
 		company.save(FILE_NAME);
@@ -116,7 +120,7 @@ Company company;
 	@Disabled
 	@Order(2)
 	void restoreTest() {
-		Company company2 = new CompanyClientTcp();
+		Company company2 = new CompanyImpl();
 		company2.restore(FILE_NAME);
 		assertIterableEquals(company, company2);
 	}

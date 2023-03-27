@@ -1,9 +1,9 @@
 package telran.Employee;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import telran.nework.app.NetworkCompanyTCP;
-
 import telran.network.TcpClient;
 
 public class CompanyClientTcp implements Company {
@@ -85,6 +85,10 @@ public class CompanyClientTcp implements Company {
 	public boolean contains(long id) {
 		
 		return clientCompany.send("contains", id);
+	}
+	
+	public void close() throws IOException {
+		clientCompany.close();
 	}
 
 
