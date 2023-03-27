@@ -1,4 +1,4 @@
-package telran.nework;
+package telran.network;
 
 public class ProtocolString implements Protocol{
 
@@ -17,7 +17,7 @@ public class ProtocolString implements Protocol{
 	private Response lengthString(Request request) {
 		Response response = new Response(null, request.data);
 		try {
-			response.data = request.data.toString().length() + "";
+			response.data = request.data.toString().length();
 			response.code = ResponseCode.OK;
 		} catch (Exception e) {
 			response.code = ResponseCode.WRONG_DATA;

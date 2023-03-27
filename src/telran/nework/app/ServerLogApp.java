@@ -56,7 +56,7 @@ public class ServerLogApp {
 		String tokens[] = request.split("#");
 		if (tokens.length > 1) {
 			res = switch (tokens[0]) {
-			case LOG_PROTOCOL -> tokens.length ==3 ? writeLogRecord(tokens[1],tokens[2]) : "Wrong number of arguments";
+			case LOG_PROTOCOL -> tokens.length == 3 ? writeLogRecord(tokens[1],tokens[2]) : "Wrong number of arguments";
 			case COUNTER_PROTOCOL -> getLogCount(tokens[1]);
 			default -> "Wrong type: " + tokens[0];
 			};

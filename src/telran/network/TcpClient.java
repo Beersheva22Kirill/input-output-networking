@@ -1,4 +1,4 @@
-package telran.nework;
+package telran.network;
 
 import java.io.*;
 import java.net.*;
@@ -19,21 +19,22 @@ public class TcpClient implements NetworkClient {
 		
 		socket.close();
 	}
-
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T send(String type, Serializable requestData) {
-			Request request = new Request(type, requestData);
-			T response = null;
-			try {
-				output.writeObject(request);
-				response = (T) input.readObject();
-			} catch (IOException e) {
-				System.out.println("Send error");
-			}catch (ClassNotFoundException e) {
-				System.out.println(e.toString());
-			} 
-				
-		return response;
+		Request request = new Request(type, requestData);
+		T res = null;
+		try {
+			output.writeObject(request);
+			Response response = (Response) input.readObject();
+			if(response.code != ResponseCode.OK) {
+				throw new Exception(response.data.toString());
+			}
+			res = (T) response.data;
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
+		return res;
 	}
 
 }

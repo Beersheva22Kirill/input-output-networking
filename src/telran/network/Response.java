@@ -1,4 +1,4 @@
-package telran.nework;
+package telran.network;
 
 import java.io.Serializable;
 

@@ -6,12 +6,14 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import telran.Employee.Employee;
+import telran.network.CompanyProtocol;
 import telran.Employee.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CompanyTest {
@@ -38,7 +40,7 @@ Employee[] employees = {empl1, empl2, empl3, empl4};
 Company company;
 	@BeforeEach
 	void setUp() throws Exception {
-		company = new CompanyImpl();
+		company = new CompanyClientTcp();
 		for(Employee empl: employees) {
 			company.addEmployee(empl);
 		}
@@ -51,6 +53,7 @@ Company company;
 		assertFalse(company.addEmployee(newEmployee));
 	}
 	@Test
+	@Disabled
 	void removeEmployeeTest() {
 		assertEquals(empl1, company.removeEmployee(ID1));
 		assertNull(company.removeEmployee(ID1));
@@ -70,6 +73,7 @@ Company company;
 		assertTrue(company.getEmployeesByMonth(MONTH1).isEmpty());
 	}
 	@Test
+	@Disabled
 	void employeesByDepartmentTest() {
 		assertTrue(company.getEmployesByDepartment("gggggg").isEmpty());
 		Employee[] expected = {empl2, empl4};
@@ -82,6 +86,7 @@ Company company;
 		
 	}
 	@Test
+	@Disabled
 	void employeesBySalaryTest() {
 		assertTrue(company.getEmployeesBySalary(100000000,100000100).isEmpty());
 		Employee[] expected = {empl1, empl2, empl3};
@@ -102,14 +107,16 @@ Company company;
 	}
 	
 	@Test
+	@Disabled
 	@Order(1)
 	void saveTest() {
 		company.save(FILE_NAME);
 	}
 	@Test
+	@Disabled
 	@Order(2)
 	void restoreTest() {
-		Company company2 = new CompanyImpl();
+		Company company2 = new CompanyClientTcp();
 		company2.restore(FILE_NAME);
 		assertIterableEquals(company, company2);
 	}

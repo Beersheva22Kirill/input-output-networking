@@ -1,4 +1,4 @@
-package telran.nework;
+package telran.network;
 
 public interface Protocol {
 	
