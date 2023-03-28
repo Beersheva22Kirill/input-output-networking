@@ -18,6 +18,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import telran.Employee.Employee;
 import telran.network.CompanyProtocol;
+import telran.network.TcpClient;
+import telran.nework.app.NetworkCompanyTCP;
 import telran.Employee.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
@@ -44,11 +46,11 @@ Employee empl3 = new Employee(ID3, "name", LocalDate.of(2000, MONTH2, 1), DEPART
 Employee empl4 = new Employee(ID4, "name", LocalDate.of(2000, MONTH1, 1), DEPARTMENT2, SALARY4);
 Employee[] employees = {empl1, empl2, empl3, empl4};
 
-protected CompanyClientUDP company;
+protected CompanyClient company;
 
 	@BeforeEach
 	void setUp() throws Exception {
-		company = new CompanyClientUDP();
+		company = new CompanyClient(new TcpClient("localhost", NetworkCompanyTCP.PORT));
 		for(Employee empl: employees) {
 			company.addEmployee(empl);
 		}

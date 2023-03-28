@@ -4,17 +4,18 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import telran.nework.app.NetworkCompanyTCP;
+import telran.network.NetworkClient;
 import telran.network.TcpClient;
 
-public class CompanyClientTCP implements Company {
+public class CompanyClient implements Company {
 
 	private static final long serialVersionUID = 1L;
 	
-	TcpClient clientCompany;
+	NetworkClient clientCompany;
 	
-	public CompanyClientTCP() {
+	public CompanyClient(NetworkClient client) {
 		try {
-			clientCompany = new TcpClient("localhost", NetworkCompanyTCP.PORT);
+			clientCompany = client;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
