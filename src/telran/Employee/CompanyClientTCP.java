@@ -23,7 +23,7 @@ public class CompanyClientTCP implements Company {
 	@Override
 	public Iterator<Employee> iterator() {
 		
-		return clientCompany.send("iterator", null);
+		return getAllEmployees().iterator();
 	}
 
 	@Override
