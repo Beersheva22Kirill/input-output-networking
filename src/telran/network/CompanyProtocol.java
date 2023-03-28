@@ -15,7 +15,6 @@ public class CompanyProtocol implements Protocol {
 		
 		Response response = switch (request.type) {
 		case "addEmployee" -> addEmployeeT(request.data);
-		case "iterator" -> iterator(request.data);
 		case "removeEmployee" -> removeEmployee(request.data);
 		case "getAllEmployees" -> getAllEmployees(request.data);
 		case "getEmployeesByMonth" -> getEmployeesByMonth(request.data);
@@ -96,12 +95,6 @@ public class CompanyProtocol implements Protocol {
 		return response;
 	}
 
-	private Response iterator(Serializable data) {
-		Response response = new Response(null, data);
-		response.data = (Serializable)company.iterator();
-		response.code = ResponseCode.OK;
-		return response;
-	}
 
 	private Response addEmployeeT(Serializable data) {
 		Response response = new Response(null, data);

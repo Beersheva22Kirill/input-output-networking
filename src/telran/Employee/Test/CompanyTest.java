@@ -126,7 +126,6 @@ protected CompanyClient company;
 	}
 	
 	@Test
-	@Disabled
 	@Order(2)
 	void restoreTest() {
 		Company company2 = new CompanyImpl();
