@@ -3,23 +3,24 @@ package telran.Employee;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import telran.nework.app.NetworkCompanyTCP;
-import telran.network.TcpClient;
 
-public class CompanyClientTCP implements Company {
+import telran.network.UdpClient;
+import telran.nework.app.NetworkCompanyTCP;
+import telran.nework.app.NetworkCompanyUDP;
+
+public class CompanyClientUDP implements Company {
 
 	private static final long serialVersionUID = 1L;
-	
-	TcpClient clientCompany;
-	
-	public CompanyClientTCP() {
+	UdpClient clientCompany;
+
+	public CompanyClientUDP() {
 		try {
-			clientCompany = new TcpClient("localhost", NetworkCompanyTCP.PORT);
+			clientCompany = new UdpClient("localhost", NetworkCompanyUDP.PORT);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
 	@Override
 	public Iterator<Employee> iterator() {
 		
@@ -90,6 +91,5 @@ public class CompanyClientTCP implements Company {
 	public void close() throws IOException {
 		clientCompany.close();
 	}
-
 
 }
