@@ -23,7 +23,6 @@ public class CalculatorApp {
 	private static void constructMenu() {	
 		subMenu.add(new Menu("arifmeticMenu", constructArifmeticMenu()));
 		subMenu.add(new Menu("Date menu", constructDateMenu()));
-		subMenu.add(new Menu("Exit", new ArrayList<Item>()));
 		new ArrayList<>();
 		mainMenu = new Menu("mainMenu", subMenu);
 	}
