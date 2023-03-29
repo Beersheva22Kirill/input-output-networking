@@ -17,13 +17,9 @@ class InputOutputTests {
 	StandartInputOutput inOut = new StandartInputOutput();
 
 	@Test
-	void testDate() throws Exception {
-		Predicate<String> predicate = (s) -> s.matches("([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.[a-zA-Z0-9_-]+)");
+	void testDateISO() throws Exception {
 		LocalDate expectedDate = LocalDate.of(2022, 4, 12);
-		assertEquals(1234, inOut.readInt("Enter number", "notNumber"));
-		assertEquals(expectedDate, inOut.readDateISO("Enter date", "notDate"));
-		assertEquals(12345, inOut.readInt("Enter number", "notIntNumber", 1, 23456));
-		inOut.readStringPredicate("Enter E-mail", "Not Email", predicate);
+		assertEquals(expectedDate, inOut.readDateISO("Enter date ISO (2022.04.12)", "notDate"));
 	}
 	
 	@Test
@@ -34,8 +30,8 @@ class InputOutputTests {
 	
 	@Test
 	void testNumber() throws Exception {
-		assertEquals(1234, inOut.readInt("Enter number", "notNumber"));
-		assertEquals(12345, inOut.readInt("Enter number", "notIntNumber", 1, 23456));
+		assertEquals(1234, inOut.readInt("Enter number 1234", "notNumber"));
+		assertEquals(12345, inOut.readInt("Enter number 12345", "notIntNumber", 1, 23456));
 	}
 	
 	@Test
@@ -49,8 +45,7 @@ class InputOutputTests {
 	
 	@Test
 	void testReadDate() throws Exception {
-		LocalDate dateExpected;
-		System.out.println(inOut.readDate("Enter date format", "Not date", "dd-MM-yyyy", LocalDate.of(2022, 04, 01), LocalDate.of(2022, 04, 10)));
+		inOut.readDate("Enter date format dd-MM-yyyy", "Not date", "dd-MM-yyyy", LocalDate.of(2022, 04, 01), LocalDate.of(2022, 04, 10));
 	}
 
 }

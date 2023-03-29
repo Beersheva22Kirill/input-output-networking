@@ -34,92 +34,99 @@ public interface InputOutput {
 	}
 	
 	default String readStringPredicate(String prompt, String errorPrompt, Predicate<String> predicat) throws Exception {
-		String res = readString(prompt);
-		if (!predicat.test(res)) {
-			throw new Exception(errorPrompt);
+		
+	return readObject(prompt, errorPrompt, s -> {
+		if (!predicat.test(s)) {
+			throw new RuntimeException("Wrong string format");
 		}
-	return res;	
+		return s;
+	});
 	}
 	
-	default String readStringOptions(String prompt, String errorPrompt, Set<String> options) throws Exception {
-		String res = readString(prompt);
-		if (!options.contains(res)) {
-			throw new Exception(errorPrompt);
-		}
-		return res;
+	default String readStringOptions(String prompt, String errorPrompt, Set<String> options) {
+		
+		return readObject(prompt, errorPrompt, s -> {
+			if (!options.contains(s)) {
+				throw new RuntimeException();
+			}
+			return s;
+		});
 		
 	}
 	
 	default int readInt(String prompt, String errorPrompt) {
-		int res = 0;
-		try {
-			res = Integer.valueOf(readString(prompt));
-		} catch (Exception e) {
-			System.out.println(errorPrompt + " - " + e.getMessage());
-		}
-		return res;
+		
+		return readInt(prompt, errorPrompt, Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
 	
 	default int readInt(String prompt, String errorPrompt, int min, int max) {
-		int res = 0;
-		try {
-			res = Integer.valueOf(readString(prompt));
-			if (res < min || res > max) {
-				 throw new Exception("Wrong range");
+		
+		return readObject(prompt, errorPrompt, (s) -> {
+			try {
+				int res = Integer.parseInt(s);
+				checkRange(min, max, res);
+				return res;
+			} catch (NumberFormatException e) {
+				throw new RuntimeException("Not number");
 			}
-		} catch (Exception e) {
-			System.out.println(errorPrompt + " - " + e.getMessage());
+		});
+	}
+	default void checkRange(double min, double max, double res) {
+		if (res < min || res > max) {
+			 throw new RuntimeException("Wrong range");
 		}
-		return res;
 	}
 	
 	default long readLong(String prompt, String errorPrompt, long min, long max) {
-		long res = 0;
-		try {
-			res = Long.valueOf(readString(prompt));
-		} catch (Exception e) {
-			System.out.println(errorPrompt + " - " + e.getMessage());
-		}
-		return res;
+	
+		return readObject(prompt, errorPrompt, (s) -> {
+			try {
+				long res = Long.parseLong(s);
+				checkRange(min, max, res);
+				return res;
+			} catch (NumberFormatException e) {
+				throw new RuntimeException("Not number");
+			}
+		});
 	}
 	
 	default LocalDate readDateISO(String prompt, String errorPrompt) {
-		LocalDate res = null;
-		try {
-			res = LocalDate.parse(readString(prompt));
-		} catch (Exception e) {
-			System.out.println(errorPrompt + " - " + e.getMessage());
-		}
-		return res;
+		
+		return readDate(prompt, errorPrompt, "yyyy-MM-dd", LocalDate.MIN, LocalDate.MAX);
 	}
 	
 	default LocalDate readDate(String prompt, String errorPrompt, String format,
 			LocalDate min, LocalDate max) {
-
-		LocalDate res = null;
-		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-			res = LocalDate.parse(readString(prompt + ": " + format),formatter);
-			if (res.compareTo(min) < 0 || res.compareTo(max) > 0) {
-				 throw new Exception("Wrong range");
+		
+		return readObject(prompt, errorPrompt, (s) -> {
+			DateTimeFormatter dtf = null;
+			try {
+				dtf = DateTimeFormatter.ofPattern(format);
+			} catch (Exception e) {
+				throw new RuntimeException("Wrong date format " + format);
 			}
-		} catch (Exception e) {
-			System.out.println(errorPrompt + " - " + e.getMessage());
-		}
-		return res;
+			LocalDate res = LocalDate.parse(s, dtf);
+			if (res.isBefore(min)) {
+				throw new RuntimeException("must not be before " + min.format(dtf));
+			}
+			if (res.isAfter(max)) {
+				throw new RuntimeException("must not be after " + max.format(dtf));
+			}
+			return res;
+		});
 	}
 	
 	default double readNumber (String prompt, String errorPrompt, double min, double max) {
-		double res = 0;
-		try {
-			res = Double.valueOf(readString(prompt));
-			if (res < min || res > max) {
-				 throw new Exception("Wrong range");
+		
+		return readObject(prompt, errorPrompt, (s) -> {
+			try {
+				double res = Double.parseDouble(s);
+				checkRange(min, max, res);
+				return res;
+			} catch (NumberFormatException e) {
+				throw new RuntimeException("Not number");
 			}
-		} catch (Exception e) {
-			System.out.println(errorPrompt + " - " + e.getMessage());
-		}
-		return res;
+		});
 		
 	}
 
