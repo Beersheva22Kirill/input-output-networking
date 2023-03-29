@@ -23,19 +23,18 @@ public class CalculatorApp {
 	private static void constructMenu() {	
 		subMenu.add(new Menu("arifmeticMenu", constructArifmeticMenu()));
 		subMenu.add(new Menu("Date menu", constructDateMenu()));
-		new ArrayList<>();
 		mainMenu = new Menu("mainMenu", subMenu);
 	}
 
 	private static ArrayList<Item> constructDateMenu() {
 		ArrayList<Item> subDateMenu = new ArrayList<>();
-		Item plusDate = Item.of("PlusDate", (io -> {
+		Item plusDate = Item.of("Plus Date", (io -> {
 			LocalDate date  = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
 			Long num = io.readLong("Enter number days for plus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
 			io.writeLine(date.plusDays(num));
 		}));
 		
-		Item minusDate = Item.of("PlusDate", (io -> {
+		Item minusDate = Item.of("Minus Date", (io -> {
 			LocalDate date  = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
 			Long num = io.readLong("Enter number days for plus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
 			io.writeLine(date.minusDays(num));
