@@ -30,47 +30,18 @@ public class CalculatorApp {
 
 	private static ArrayList<Item> constructDateMenu() {
 		ArrayList<Item> subDateMenu = new ArrayList<>();
+		Item plusDate = Item.of("PlusDate", (io -> {
+			LocalDate date  = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
+			Long num = io.readLong("Enter number days for plus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
+			io.writeLine(date.plusDays(num));
+		}));
 		
-		Item plusDate = new Item() {
-			
-			@Override
-			public void perform(InputOutput io) {
-				LocalDate date = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
-				Long num = io.readLong("Enter number days for plus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
-				io.writeLine(date.plusDays(num));
-				
-			}
-			
-			@Override
-			public boolean isExit() {
-				return false;
-			}
-			
-			@Override
-			public String displayName() {
-				return "Plus date";
-			}
-		};
-		Item minusDate = new Item() {
-			
-			@Override
-			public void perform(InputOutput io) {
-				LocalDate date = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
-				Long num = io.readLong("Enter number days for minus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
-				io.writeLine(date.minusDays(num));
-				
-			}
-			
-			@Override
-			public boolean isExit() {
-				return false;
-			}
-			
-			@Override
-			public String displayName() {
-				return "Minus date";
-			}
-		};
+		Item minusDate = Item.of("PlusDate", (io -> {
+			LocalDate date  = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
+			Long num = io.readLong("Enter number days for plus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
+			io.writeLine(date.minusDays(num));
+		}));
+		
 		Item exit = constructExit();
 		
 		subDateMenu.add(plusDate);
@@ -81,119 +52,42 @@ public class CalculatorApp {
 	}
 
 	private static Item constructExit() {
-		Item exit = new Item() {
-			
-			@Override
-			public void perform(InputOutput io) {	
-			}
-			
-			@Override
-			public boolean isExit() {
-				return true;
-			}
-			
-			@Override
-			public String displayName() {
-				
-				return "Exit";
-			}
-		};
+		Item exit = Item.of("Exit", null, true);
 		return exit;
 	}
 
 	private static ArrayList<Item> constructArifmeticMenu() {
 		ArrayList<Item> subArifmeticMenu = new ArrayList<>();
-		Item plus = new Item() {
-			
-			@Override
-			public void perform(InputOutput io) {
-				Double num1 = io.readNumber("Enter number 1", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				Double num2 = io.readNumber("Enter number 2", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				io.writeLine(num2 + num1);
-				
-			}
-			
-			@Override
-			public boolean isExit() {
-				return false;
-			}
-			
-			@Override
-			public String displayName() {
-				
-				return "Plus";
-			}
-		};	
-		Item minus = new Item() {
-			
-			@Override
-			public void perform(InputOutput io) {
-				Double num1 = io.readNumber("Enter number 1", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				Double num2 = io.readNumber("Enter number 2", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				io.writeLine(num1 - num2);
-				
-			}
-			
-			@Override
-			public boolean isExit() {
-				return false;
-			}
-			
-			@Override
-			public String displayName() {
-				
-				return "Minus";
-			}
-		};		
-		Item divide = new Item() {
-			
-			@Override
-			public void perform(InputOutput io) {
-				Double num1 = io.readNumber("Enter number 1", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				Double num2 = io.readNumber("Enter number 2", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				io.writeLine(num1 * num2);
-				
-			}
-			
-			@Override
-			public boolean isExit() {
-				return false;
-			}
-			
-			@Override
-			public String displayName() {
-				
-				return "Divide";
-			}
-		};
-		Item multiple = new Item() {
-			
-			@Override
-			public void perform(InputOutput io) {
-				Double num1;
-				Double num2;
-				num1 = io.readNumber("Enter number 1", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				num2 = io.readNumber("Enter number 2", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-				io.writeLine(num1 / num2);	
-			}
-			
-			@Override
-			public boolean isExit() {
-				return false;
-			}
-			
-			@Override
-			public String displayName() {
-				
-				return "Multiple";
-			}
-		};
+		Item plus = Item.of("Plus", (io -> {
+			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
+			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
+			io.writeLine(num2 + num1);
+		}));
+		
+		Item minus = Item.of("Minus", (io -> {
+			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
+			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
+			io.writeLine(num1 - num2);
+		}));
+		
+		Item divide = Item.of("Divide", (io -> {
+			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
+			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
+			io.writeLine(num1 / num2);
+		}));
+		
+		Item multiply = Item.of("Multiply", (io -> {
+			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
+			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
+			io.writeLine(num1 * num2);
+		}));
+		
 		Item exit = constructExit();
 		
 		subArifmeticMenu.add(plus);
 		subArifmeticMenu.add(minus);
 		subArifmeticMenu.add(divide);
-		subArifmeticMenu.add(multiple);
+		subArifmeticMenu.add(multiply);
 		subArifmeticMenu.add(exit);
 		
 		return subArifmeticMenu;
