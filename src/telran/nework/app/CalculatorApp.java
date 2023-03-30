@@ -20,10 +20,12 @@ public class CalculatorApp {
 		mainMenu.perform(InputOutput);		
 	}
 
-	private static void constructMenu() {	
-		subMenu.add(new Menu("arifmeticMenu", constructArifmeticMenu()));
-		subMenu.add(new Menu("Date menu", constructDateMenu()));
-		mainMenu = new Menu("mainMenu", subMenu);
+	private static void constructMenu() {
+		Item exit;
+		subMenu.add(new Menu("Arifmetic operation", constructArifmeticMenu()));
+		subMenu.add(new Menu("Date operation", constructDateMenu()));
+		subMenu.add(exit = Item.of("Exit", s ->{},true));
+		mainMenu = new Menu("Main Menu", subMenu);
 	}
 
 	private static ArrayList<Item> constructDateMenu() {
@@ -41,7 +43,6 @@ public class CalculatorApp {
 		}));
 		
 		Item exit = constructExit();
-		
 		subDateMenu.add(plusDate);
 		subDateMenu.add(minusDate);
 		subDateMenu.add(exit);
@@ -50,7 +51,7 @@ public class CalculatorApp {
 	}
 
 	private static Item constructExit() {
-		Item exit = Item.of("Exit", null, true);
+		Item exit = Item.of("Exit", s -> {}, true);
 		return exit;
 	}
 
