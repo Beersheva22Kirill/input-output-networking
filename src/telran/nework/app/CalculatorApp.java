@@ -15,30 +15,31 @@ public class CalculatorApp {
 	static Item dateMenu;
 
 	public static void main(String[] args) {
-		StandartInputOutput InputOutput = new StandartInputOutput();
+		StandartInputOutput inputOutput = new StandartInputOutput();
 		constructMenu();
-		mainMenu.perform(InputOutput);		
+		mainMenu.perform(inputOutput);
+		
+		inputOutput.writeString("Application closed");
+		
 	}
 
 	private static void constructMenu() {
-		Item exit;
 		subMenu.add(new Menu("Arifmetic operation", constructArifmeticMenu()));
 		subMenu.add(new Menu("Date operation", constructDateMenu()));
-		subMenu.add(exit = Item.of("Exit", s ->{},true));
+		subMenu.add(constructExit());
 		mainMenu = new Menu("Main Menu", subMenu);
 	}
 
 	private static ArrayList<Item> constructDateMenu() {
 		ArrayList<Item> subDateMenu = new ArrayList<>();
-		Item plusDate = Item.of("Plus Date", (io -> {
-			LocalDate date  = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
-			Long num = io.readLong("Enter number days for plus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
+		Item plusDate = Item.of("Plus Date", (io -> {LocalDate date  = getDate(io);	
+			Long num = getNumberForDate(io);
 			io.writeLine(date.plusDays(num));
 		}));
 		
 		Item minusDate = Item.of("Minus Date", (io -> {
-			LocalDate date  = io.readDate("Enter date by format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
-			Long num = io.readLong("Enter number days for plus", "Not number",Long.MIN_VALUE,Long.MAX_VALUE);
+			LocalDate date  = getDate(io);
+			Long num = getNumberForDate(io);
 			io.writeLine(date.minusDays(num));
 		}));
 		
@@ -57,30 +58,10 @@ public class CalculatorApp {
 
 	private static ArrayList<Item> constructArifmeticMenu() {
 		ArrayList<Item> subArifmeticMenu = new ArrayList<>();
-		Item plus = Item.of("Plus", (io -> {
-			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
-			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-			io.writeLine(num2 + num1);
-		}));
-		
-		Item minus = Item.of("Minus", (io -> {
-			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
-			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-			io.writeLine(num1 - num2);
-		}));
-		
-		Item divide = Item.of("Divide", (io -> {
-			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
-			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-			io.writeLine(num1 / num2);
-		}));
-		
-		Item multiply = Item.of("Multiply", (io -> {
-			Double num1  = io.readNumber("Enter first number", "Not number",  Double.MIN_VALUE, Double.MAX_VALUE);
-			Double num2 = io.readNumber("Enter second number", "Not number", Double.MIN_VALUE, Double.MAX_VALUE);
-			io.writeLine(num1 * num2);
-		}));
-		
+		Item plus = Item.of("Plus", (io -> {Double[] numbers = getNumbers(io);io.writeLine(numbers[0] + numbers[1]);}));
+		Item minus = Item.of("Minus", (io -> {Double[] numbers = getNumbers(io);io.writeLine(numbers[0] - numbers[1]);	}));	
+		Item divide = Item.of("Divide", (io -> {Double[] numbers = getNumbers(io);io.writeLine(numbers[0] / numbers[1]);}));
+		Item multiply = Item.of("Multiply", (io -> {Double[] numbers = getNumbers(io);io.writeLine(numbers[0] * numbers[1]);}));
 		Item exit = constructExit();
 		
 		subArifmeticMenu.add(plus);
@@ -90,6 +71,21 @@ public class CalculatorApp {
 		subArifmeticMenu.add(exit);
 		
 		return subArifmeticMenu;
+	}
+
+	private static Double[] getNumbers(InputOutput io) {	
+		Double[] numbers = new Double[2];
+		numbers[0]  = io.readNumber("Enter first number", "Not number",  Double.NEGATIVE_INFINITY, Double.MAX_VALUE);
+		numbers[1] = io.readNumber("Enter second number", "Not number", Double.NEGATIVE_INFINITY, Double.MAX_VALUE);
+		return numbers;
+	}
+	
+	private static long getNumberForDate(InputOutput io) {
+		return io.readLong("Enter number days", "Not number",1,Long.MAX_VALUE);
+	}
+
+	private static LocalDate getDate(InputOutput io) {
+		return io.readDate("Enter the date in the format dd-MM-yyyy", "Wrong date", "dd-MM-yyyy", LocalDate.MIN, LocalDate.MAX);
 	}
 
 }
