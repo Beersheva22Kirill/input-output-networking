@@ -8,7 +8,7 @@ import telran.view.StandartInputOutput;
 
 public class CompanyApp {
 
-	private static final String FILE_NAME = "CompanyLocal";;
+	private static final String FILE_NAME = "CompanyLocal";
 
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		

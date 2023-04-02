@@ -37,7 +37,7 @@ public class CompanyProtocol implements Protocol {
 		return response;
 	}
 
-	private Response restore(Serializable data) {
+	public Response restore(Serializable data) {
 		Response response = new Response(null, null);
 		company.restore((String) data);
 		response.code = ResponseCode.OK;
@@ -45,7 +45,7 @@ public class CompanyProtocol implements Protocol {
 		return response;
 	}
 
-	private Response save(Serializable data) {
+	public Response save(Serializable data) {
 		Response response = new Response(null, null);
 		company.save((String) data);
 		response.code = ResponseCode.OK;
