@@ -1,9 +1,10 @@
 package telran.Employee.App.Controller;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
+import telran.Employee.*;
+import telran.view.*;
 
-import telran.Employee.CompanyClientTCP;
-import telran.view.StandartInputOutput;
 
 public class CompanyClientApp {
 
@@ -12,8 +13,14 @@ public class CompanyClientApp {
 	public static void main(String[] args) {
 		CompanyClientTCP company = new CompanyClientTCP();
 		StandartInputOutput io = new StandartInputOutput();
-		CompanyController controller = new CompanyController(io, company);
-		company.save(FILE_NAME);
+		
+		Item[] companyItems = CompanyController.getCompanyItems
+				(company, new String[] {"QA", "Development", "Audit",
+						"Management", "Accounting"});
+		ArrayList<Item> items= new ArrayList<>(Arrays.asList(companyItems));
+		items.add(Item.of("Exit & save", io1 -> company.save(FILE_NAME), true));
+		Menu menu = new Menu("Company Application", items);
+		menu.perform(io);
 		try {
 			company.close();
 		} catch (IOException e) {

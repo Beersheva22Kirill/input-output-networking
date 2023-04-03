@@ -2,101 +2,108 @@ package telran.Employee.App.Controller;
 
 import java.time.LocalDate;
 import java.util.*;
-
-import telran.Employee.Company;
-import telran.Employee.Employee;
-import telran.view.InputOutput;
-import telran.view.Item;
-import telran.view.Menu;
-import telran.view.StandartInputOutput;
+import telran.Employee.*;
+import telran.view.*;
+import static telran.view.Item.*;
 
 
 public class CompanyController {
-
-	InputOutput inputOutput;
-	Company client;
-	ArrayList<Item> subMenu;
-	Item mainMenu;
-	Item userItemMenu;
-	Item adminItemMenu;
+	private static final int MIN_SALARY = 5000;
+	private static final int MAX_SALARY = 50000;
+	static private Company company;
+	static private HashSet<String> departments;
 	
-	void contructMenu(){
-		subMenu = new ArrayList<>();
-		Menu userOperation = new Menu("User operation", constructUserItemMenu());
-		Menu adminOperation = new Menu("Admin operation", constructAdminItemMenu());
-		subMenu.add(userOperation);
-		subMenu.add(adminOperation);
-		subMenu.add(Item.exit());
-		mainMenu = new Menu("Main Menu", subMenu);
-		mainMenu.perform(inputOutput);
-		inputOutput.writeString("Application closed");
+	private CompanyController() {
+		
 	}
-
-
-	private ArrayList<Item> constructAdminItemMenu() {
-		ArrayList<Item> subAdminItemMenu = new ArrayList<>();
-		Item addEmployee = Item.of("Add employee", (io ->{
-			long id = io.readLong("Enter Id", "Not number", Long.MIN_VALUE, Long.MAX_VALUE);
-			String name = io.readString("Enter name");
-			LocalDate birthDate = io.readDateISO("Enter date in format yyyy-MM-dd", "Wrong date or format");
-			String department = io.readString("Enter department");
-			int salary = io.readInt("Enter salary", "Not number");
-			Employee employeeForAdd = new Employee(id, name, birthDate, department, salary);
-			io.writeLine(client.addEmployee(employeeForAdd));
-		}));
-		Item removeEmployee = Item.of("Remove employee", (io -> {
-			long id = io.readLong("Enter id for remove employee", "Not number", Long.MIN_VALUE, Long.MAX_VALUE);
-			Employee removeEmpl = client.removeEmployee(id);
-			if ( removeEmpl !=null) {
-				io.writeLine("Employee: " + removeEmpl.toString() + " removed");
-			} else {
-				io.writeLine("Not Emloyee with id " + id + " in company");
-			}
-			
-		}));	
-		Item exit = Item.exit();
-		
-		subAdminItemMenu.add(addEmployee);
-		subAdminItemMenu.add(removeEmployee);
-		subAdminItemMenu.add(exit);
-		
-		return subAdminItemMenu;
+	static public Item[] getCompanyItems(Company company,
+			String[] departments) {
+		CompanyController.company = company;
+		CompanyController.departments = new HashSet<>(Arrays.asList(departments));
+		return getItems();
 	}
-
-	private ArrayList<Item> constructUserItemMenu() {
-		ArrayList<Item> subUserItemMenu = new ArrayList<>();
-		Item getAllEmployee = Item.of("get All Employees", (io ->{
-			List<Employee> empl = client.getAllEmployees();
-			io.writeLine(empl.toString());}));
-		Item getBySalary = Item.of("get Employees by salary", (io -> {
-			int fromSalary = io.readInt("Enter from salary", "Not number");
-			int toSalary = io.readInt("Enter to salary", "Not number");
-			io.writeLine(client.getEmployeesBySalary(fromSalary, toSalary));
-		}));	
-		Item getByMonth = Item.of("get Employees by month", (io -> {
-			int month = io.readInt("Enter month birthDate", "Not number");
-			io.writeLine(client.getEmployeesByMonth(month));
-		}));
-		Item getByDepartment = Item.of("get Employees by department", (io -> {
-			String department = io.readString("Enter department");
-			io.writeLine(client.getEmployesByDepartment(department));
-		}));
-		Item exit = Item.exit();
+	private static Item[] getItems() {
 		
-		subUserItemMenu.add(getAllEmployee);
-		subUserItemMenu.add(getBySalary);
-		subUserItemMenu.add(getByMonth);
-		subUserItemMenu.add(getByDepartment);
-		subUserItemMenu.add(exit);
-		
-		return subUserItemMenu;
+		return new Item[] {
+			getAdminMenu(), getUserMenu() 	
+		};
 	}
-
-
-	public CompanyController(StandartInputOutput inputOutput, Company client) {
-		this.inputOutput = inputOutput;
-		this.client = client;
-		contructMenu();
+	private static Item getUserMenu() {
+		
+		return new Menu("User actions", of("Display Employee Data",CompanyController::getEmployee),
+				of("Display data of all employees",CompanyController::getAllEmployees),
+				of("Display Employees by salary", CompanyController::getEmployeesBySalary),
+				of("Display Employees by Month", CompanyController::getEmployeesByMonth),
+				of("Display Employess from Department", CompanyController::getEmployeesByDepartment),
+				exit());
+	}
+	private static Item getAdminMenu() {
+		
+		return new Menu("Admin actions",
+				of("add employee", CompanyController::addEmployee),
+				of("Remove Employee", CompanyController::removeEmployee),
+				exit());
+	}
+	private static Long getId(InputOutput io, boolean exist) {
+		long id = io.readLong("Enter Employee ID", "Wrong ID", 1, Long.MAX_VALUE);
+		Employee empl = company.getEmployee(id);
+		return (empl == null && !exist) || (empl != null && exist) ? id : null;
+	}
+	private static String getDepartment(InputOutput io) {
+		String department = io.readStringOptions("Enter Department " + departments, "Wrong Department", departments);
+		return department;
+	}
+	private static void addEmployee(InputOutput io) {
+		Long id = getId(io, false);
+		if (id == null) {
+			io.writeLine("Employee already exists");
+		} else {
+			String name = io.readString("Enter Employee's name");
+			LocalDate birthDate = io.readDateISO("Enter birthdate", "Wrong birthdate");
+			String department = getDepartment(io);
+			int salary = getSalary(io);
+			Employee empl = new Employee(id, name , birthDate , department , salary );
+			io.writeLine(company.addEmployee(empl) ? "Employee added" : "Employee already exists");
+		}
+	}
+	private static int getSalary(InputOutput io) {
+		return io.readInt("Enter salary", "Wrong Salary", MIN_SALARY, MAX_SALARY);
+	}
+	private static void removeEmployee(InputOutput io) {
+		Long id = getId(io, true);
+		if (id == null) {
+			io.writeLine("Employee doesn't exist");
+		} else {
+			Employee empl = company.removeEmployee(id);
+			io.writeLine(empl != null ? "removed" : "not found");
+		}
+	}
+	private static void getAllEmployees(InputOutput io) {
+		displayResult(company.getAllEmployees(), io);
+	}
+	private static void getEmployee(InputOutput io) {
+		Long id = getId(io, true);
+		io.writeLine(id != null ? company.getEmployee(id) : "Employee doesn't exist");
+		
+	}
+	private static void getEmployeesBySalary(InputOutput io) {
+		int salaryMin = io.readInt("Enter Salary from", "Wrong salary", MIN_SALARY, MAX_SALARY);
+		int salaryMax = io.readInt("Enter  salary to", "Wrong salary", salaryMin, MAX_SALARY);
+		displayResult(company.getEmployeesBySalary(salaryMin, salaryMax), io);
+	}
+	private static void displayResult(List<Employee> employees, InputOutput io) {
+		employees.forEach(io::writeLine);
+		
+	}
+	private static void getEmployeesByMonth(InputOutput io) {
+		int month = io.readInt("Enter month number", "Wrong month number", 1, 12);
+		
+		displayResult(company.getEmployeesByMonth(month), io);
+	}
+	private static void getEmployeesByDepartment(InputOutput io) {
+		String department = getDepartment(io);
+		
+		displayResult(company.getEmployesByDepartment(department),io);
 	}
 	
 

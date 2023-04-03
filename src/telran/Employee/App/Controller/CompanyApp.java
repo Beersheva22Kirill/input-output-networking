@@ -1,27 +1,24 @@
 package telran.Employee.App.Controller;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import telran.Employee.CompanyImpl;
-import telran.view.StandartInputOutput;
+import java.util.*;
+import telran.Employee.*;
+import telran.view.*;
 
 public class CompanyApp {
 
-	private static final String FILE_NAME = "CompanyLocal";
+	private static final String FILE_PATH = "CompanyLocal.data";
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		
-		StandartInputOutput io = new StandartInputOutput();
-		CompanyImpl company = new CompanyImpl();
-		try {
-			company.restore(FILE_NAME);
-		} catch (Exception e) {
-			e.getMessage();
-		}
-		CompanyController controller = new CompanyController(io, company);
-		company.save(FILE_NAME);
-		
+	public static void main(String[] args) {
+		InputOutput io = new StandartInputOutput();
+		Company company = new CompanyImpl();
+		company.restore(FILE_PATH);
+		Item[] companyItems = CompanyController.getCompanyItems
+				(company, new String[] {"QA", "Development", "Audit",
+						"Management", "Accounting"});
+		ArrayList<Item> items= new ArrayList<>(Arrays.asList(companyItems));
+		items.add(Item.of("Exit & save", io1 -> company.save(FILE_PATH), true));
+		Menu menu = new Menu("Company Application", items);
+		menu.perform(io);
 
 	}
 

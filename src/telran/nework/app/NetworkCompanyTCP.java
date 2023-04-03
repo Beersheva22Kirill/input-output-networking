@@ -8,7 +8,7 @@ import telran.network.UdpServer;
 public class NetworkCompanyTCP {
 
 	public static final int PORT = 4000;
-	private static final String FILE_NAME = "CompanyLocal";
+	private static final String FILE_NAME = "CompanyLocal.data";
 
 	public static void main(String[] args) {
 			
