@@ -3,6 +3,7 @@ package telran.Employee.App.Controller;
 import java.io.*;
 import java.util.*;
 import telran.Employee.*;
+import telran.nework.app.NetworkCompanyTCP;
 import telran.view.*;
 
 
@@ -11,7 +12,7 @@ public class CompanyClientApp {
 	private static final String FILE_NAME = "CompanyLocal";
 
 	public static void main(String[] args) {
-		CompanyClientTCP company = new CompanyClientTCP();
+		CompanyClientTCP company = new CompanyClientTCP("localhost", NetworkCompanyTCP.PORT);
 		StandartInputOutput io = new StandartInputOutput();
 		
 		Item[] companyItems = CompanyController.getCompanyItems

@@ -11,10 +11,14 @@ public class CompanyClientTCP implements Company {
 	private static final long serialVersionUID = 1L;
 	
 	TcpClient clientCompany;
+	private int port;
+	private String host;
 	
-	public CompanyClientTCP() {
+	public CompanyClientTCP(String host, int port) {
 		try {
-			clientCompany = new TcpClient("localhost", NetworkCompanyTCP.PORT);
+			this.port = port;
+			this.host = host;
+			clientCompany = new TcpClient(host, port);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
