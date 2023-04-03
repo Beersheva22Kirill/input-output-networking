@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 public class Menu implements Item {
 	
-	private static final int BEFORE_OFFSET = 20;
+	private static final int BEFORE_OFFSET = 40;
 	private String name;
 	private ArrayList<Item> items;
 	
@@ -52,7 +52,7 @@ public class Menu implements Item {
 
 	private void displayTitle(InputOutput io) {
 		io.writeLine("*".repeat(BEFORE_OFFSET));
-		io.writeLine(String.format("%s%s", " ".repeat(BEFORE_OFFSET / 4), name, " ".repeat(BEFORE_OFFSET / 4)));
+		io.writeLine(String.format("%s%s", " ".repeat(BEFORE_OFFSET / 5), name, " ".repeat(BEFORE_OFFSET / 4)));
 		io.writeLine("*".repeat(BEFORE_OFFSET));
 		
 	}

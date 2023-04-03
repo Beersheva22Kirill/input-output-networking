@@ -28,7 +28,9 @@ public class UdpServer implements Runnable {
 				bufferSend = toBytesArray(response);
 				DatagramPacket packetSend = new DatagramPacket(bufferSend, bufferSend.length, packetReceive.getAddress(), packetReceive.getPort());
 				socket.send(packetSend);
+				System.out.println("client closed connection");
 			}
+			
 		} catch (Exception e) {
 			throw new RuntimeException(e.toString());
 		}

@@ -62,8 +62,8 @@ public class Employee implements Serializable,Comparable<Employee>{
 	@Override
 	public String toString() {
 		
-		return "\nID: " + id + "\nname: " + name + "\nDepartment: " + department 
-				+ "\nBirth Date: " + birthDate + "\nSalary: " + salary + "\n";
+		return "ID: " + id + " Name: " + name + " Department: " + department 
+				+ " Birth Date: " + birthDate + " Salary: " + salary;
 	}
 	
 	

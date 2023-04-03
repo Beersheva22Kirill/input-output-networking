@@ -8,11 +8,14 @@ import telran.network.UdpServer;
 public class NetworkCompanyUDP {
 
 	public static final int PORT = 4000;
+	private static final String FILE_NAME = "CompanyLocal.data";
 
 	public static void main(String[] args) {
 			
 		try {
-			UdpServer server = new UdpServer(PORT, new CompanyProtocol());
+			CompanyProtocol protocol = new CompanyProtocol();
+			protocol.restore(FILE_NAME);
+			UdpServer server = new UdpServer(PORT, protocol);
 			server.run();
 		} catch (Exception e) {
 			System.out.println(e.toString());

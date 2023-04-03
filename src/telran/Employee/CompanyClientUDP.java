@@ -12,13 +12,21 @@ public class CompanyClientUDP implements Company {
 
 	private static final long serialVersionUID = 1L;
 	UdpClient clientCompany;
-
-	public CompanyClientUDP() {
+	private int port;
+	private String host;
+	
+	public CompanyClientUDP(String host, int port) {
 		try {
-			clientCompany = new UdpClient("localhost", NetworkCompanyUDP.PORT);
+			this.port = port;
+			this.host = host;
+			clientCompany = new UdpClient(host, port);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public CompanyClientUDP() {
+		this("localhost", 4000);
 	}
 	
 	@Override

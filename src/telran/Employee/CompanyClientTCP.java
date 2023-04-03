@@ -23,6 +23,10 @@ public class CompanyClientTCP implements Company {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public CompanyClientTCP() {
+		this("localhost", 4000);
+	}
 
 	@Override
 	public Iterator<Employee> iterator() {
@@ -90,6 +94,7 @@ public class CompanyClientTCP implements Company {
 		
 		return clientCompany.send("contains", id);
 	}
+	
 	
 	public void close() throws IOException {
 		clientCompany.close();

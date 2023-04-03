@@ -1,0 +1,4 @@
+hostname:localhost
+port:4000
+transport:local
+departments:QA,Development,Management,Audit,HR
