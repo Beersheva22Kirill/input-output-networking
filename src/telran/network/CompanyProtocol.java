@@ -1,6 +1,9 @@
 package telran.network;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import telran.Employee.Company;
 import telran.Employee.CompanyImpl;
 import telran.Employee.Employee;
@@ -12,22 +15,34 @@ public class CompanyProtocol implements Protocol {
 
 	@Override
 	public Response getResponse(Request request) {
-		
-		Response response = switch (request.type) {
-		case "addEmployee" -> addEmployeeT(request.data);
-		case "iterator" -> iterator(request.data);
-		case "removeEmployee" -> removeEmployee(request.data);
-		case "getAllEmployees" -> getAllEmployees(request.data);
-		case "getEmployeesByMonth" -> getEmployeesByMonth(request.data);
-		case "getEmployeesBySalary" -> getEmployeesBySalary(request.data);
-		case "getEmployesByDepartment" -> getEmployesByDepartment(request.data);
-		case "getEmployee" -> getEmployee(request.data);
-		case "save" -> save(request.data);
-		case "restore" -> restore(request.data);
-		case "contains" -> contains(request.data);
-		default -> new Response(ResponseCode.WRONG_REQUEST, request.data);
-		};
+		Response response = null;
+		try {
+			Method method = CompanyProtocol.class.getDeclaredMethod(request.type, Serializable.class);
+			method.setAccessible(true);
+			response = (Response) method.invoke(this, request.data);
+			
+		} catch (NoSuchMethodException | SecurityException e) {
+			response = new Response(ResponseCode.WRONG_REQUEST, request.type);
+		} catch (Exception e) {
+			response = new Response(ResponseCode.WRONG_DATA, request.data);
+		} 
 		return response;
+		
+//		Response response = switch (request.type) {
+//		case "addEmployee" -> addEmployeeT(request.data);
+//		case "iterator" -> iterator(request.data);
+//		case "removeEmployee" -> removeEmployee(request.data);
+//		case "getAllEmployees" -> getAllEmployees(request.data);
+//		case "getEmployeesByMonth" -> getEmployeesByMonth(request.data);
+//		case "getEmployeesBySalary" -> getEmployeesBySalary(request.data);
+//		case "getEmployesByDepartment" -> getEmployesByDepartment(request.data);
+//		case "getEmployee" -> getEmployee(request.data);
+//		case "save" -> save(request.data);
+//		case "restore" -> restore(request.data);
+//		case "contains" -> contains(request.data);
+//		default -> new Response(ResponseCode.WRONG_REQUEST, request.data);
+//		};
+//		return response;
 	}
 
 	private Response contains(Serializable data) {
