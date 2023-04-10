@@ -1,14 +1,22 @@
 package telran.Git;
 
-public class CommitMessage {
+import java.io.Serializable;
+
+public class CommitMessage implements Serializable{
 	
-	String massage;
-	Commit commit;
+	private static final long serialVersionUID = 1L;
+	String massage;;
 	
+
 	
-	public CommitMessage(String massage, Commit commit) {
+	public CommitMessage(String massage) {
 		this.massage = massage;
-		this.commit = commit;
+	}
+
+
+	@Override
+	public String toString() {
+		return "CommitMessage [massage=" + massage + "]";
 	}
 	
 	
