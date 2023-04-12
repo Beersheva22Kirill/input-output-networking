@@ -1,11 +1,8 @@
 package telran.Git;
 
-import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-
 import telran.view.Item;
 import telran.view.Menu;
 import telran.view.StandartInputOutput;
@@ -77,16 +74,7 @@ public class MyGitApp {
 		
 		Item swithTo = Item.of("Swith to", (io -> {
 			io.writeLine(repository.switchTo(io.readString("Enter name branch or commit")));	
-		}));
-		
-		Item testRestore = Item.of("Test restore", (io -> {
-			try {
-				repository.restore();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		}));
+		}));	
 		
 		Item exit = Item.exit();
 		subFilesMenu.add(info);
@@ -95,7 +83,6 @@ public class MyGitApp {
 		subFilesMenu.add(getHead);
 		subFilesMenu.add(commitContent);
 		subFilesMenu.add(swithTo);
-		subFilesMenu.add(testRestore);
 		subFilesMenu.add(Item.exit());
 		
 		return subFilesMenu;
@@ -110,16 +97,22 @@ public class MyGitApp {
 		Item RenameBbranch = Item.of("Rename branch", (io -> {
 			repository.renameBranch(io.readString("Enter name branch"), io.readString("Enter new name branche"));
 		}));
-		Item AllBbranches = Item.of("All branches", (io -> {
+		Item allBbranches = Item.of("Display all branches", (io -> {
 			List<String> br = repository.branches();
 			for (String nameBranch : br) {
 				io.writeLine(nameBranch);
 			}
 		}));
+		
+		Item delBbranches = Item.of("Delete branche", (io -> {
+			io.writeLine(repository.deleteBranch(io.readString("Enter branch name")));
+		}));
+		
 		Item exit = Item.exit();
 		subBranchMenu.add(CreateBranch);
 		subBranchMenu.add(RenameBbranch);
-		subBranchMenu.add(AllBbranches);
+		subBranchMenu.add(delBbranches);
+		subBranchMenu.add(allBbranches);
 		subBranchMenu.add(exit);
 	
 		return subBranchMenu;

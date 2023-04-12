@@ -8,7 +8,6 @@ public class CommitMessage implements Serializable{
 	String massage;;
 	
 
-	
 	public CommitMessage(String massage) {
 		this.massage = massage;
 	}

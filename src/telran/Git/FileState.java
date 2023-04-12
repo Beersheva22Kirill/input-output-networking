@@ -8,15 +8,13 @@ public class FileState implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
-	//String path;
 	FileStatus status;
 	File file;
-	Long time;
+	long time;
 	
-	public FileState(File fileName, FileStatus status, Long time) {
+	public FileState(File fileName, FileStatus status, long time) {
 	
 		this.time = time;
-		//this.path = path;
 		this.file = fileName;
 		this.status = status;
 	}
