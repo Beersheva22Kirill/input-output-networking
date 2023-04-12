@@ -30,23 +30,24 @@ public class MyGitApp {
 
 	}
 
+	
 	private static void constructMenu() {
-		subMenu.add(new Menu("Operation in files", constructFilesMenu()));
-		subMenu.add(new Menu("Operation in branch", constructBranchMenu()));
+		subMenu.add(new Menu("Main Operations in 'Git'", constructMainGitMenu()));
+		subMenu.add(new Menu("Operations in 'branches'", constructBranchMenu()));
 		subMenu.add(Item.exit());
-		mainMenu = new Menu("Main Menu", subMenu);
+		mainMenu = new Menu("Main Menu 'MyGit'" , subMenu);
 		
 	}
 	
-	private static ArrayList<Item> constructFilesMenu() {
+	private static ArrayList<Item> constructMainGitMenu() {
 		
 		ArrayList<Item> subFilesMenu = new ArrayList<>();
+		
 		Item info = Item.of("Info", (io -> {
 			List<FileState> files = repository.info();
 			for (FileState file : files) {
 				io.writeLine(file);
-			}
-			
+			}	
 		}));
 		
 		Item commit = Item.of("Commit", (io -> {
@@ -76,7 +77,6 @@ public class MyGitApp {
 			io.writeLine(repository.switchTo(io.readString("Enter name branch or commit")));	
 		}));	
 		
-		Item exit = Item.exit();
 		subFilesMenu.add(info);
 		subFilesMenu.add(commit);
 		subFilesMenu.add(log);
@@ -108,12 +108,11 @@ public class MyGitApp {
 			io.writeLine(repository.deleteBranch(io.readString("Enter branch name")));
 		}));
 		
-		Item exit = Item.exit();
 		subBranchMenu.add(CreateBranch);
 		subBranchMenu.add(RenameBbranch);
 		subBranchMenu.add(delBbranches);
 		subBranchMenu.add(allBbranches);
-		subBranchMenu.add(exit);
+		subBranchMenu.add(Item.exit());
 	
 		return subBranchMenu;
 	}
