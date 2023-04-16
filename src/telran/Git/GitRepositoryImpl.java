@@ -28,9 +28,9 @@ public class GitRepositoryImpl implements GitRepository {
 	}
 	
 	public static GitRepositoryImpl init() {
-		File gitFile = new File(pathRepository + "/testGit.mygit");
+		File gitFile = new File(pathRepository + "testGit.mygit");
 		GitRepositoryImpl repository = new GitRepositoryImpl(pathRepository);
-		repository.regex = repository.addIgnoredFileNameExp("\\w+\\.txt$");	
+		repository.regex = repository.addIgnoredFileNameExp("[\\w\\s]+\\.txt$");	
 		try {
 			boolean fileExists = gitFile.createNewFile();
 			if (!fileExists) { 
@@ -156,7 +156,7 @@ public class GitRepositoryImpl implements GitRepository {
 		if (branch != head.currentBranch) {
 			commits.remove(branch);
 			branches.remove(branchName);
-			res = "Branch: " + branchName + " deleted";
+			res = "Branch: " + branch.getName() + " deleted";
 		} else {
 			res = "You can't delete a branch on which HEAD";
 		}
@@ -166,8 +166,18 @@ public class GitRepositoryImpl implements GitRepository {
 
 	@Override
 	public List<String> branches() {
-
-		return new LinkedList<>(this.branches.keySet());
+		LinkedList<String> branches = new LinkedList<>(this.branches.keySet());
+		Iterator<String> iterator = branches.iterator();
+		String currBranch = null;
+		while (iterator.hasNext()) {
+			currBranch = iterator.next();
+			if (currBranch.equals(head.currentBranch.getName())) {
+				branches.remove(currBranch);
+				currBranch += "*"; 	
+			}	
+		}
+		branches.add(currBranch);
+		return branches;
 	}
 
 	@Override
